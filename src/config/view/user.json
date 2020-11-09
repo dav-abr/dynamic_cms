@@ -1,0 +1,30 @@
+{
+  "name": "User",
+  "inMenu": false,
+  "url": "/user/view/:id",
+  "page": {
+    "type": "view",
+    "options": {
+      "name": "User info",
+      "initial": "https://jsonplaceholder.typicode.com/users",
+      "fields": [
+        {
+          "name": "name",
+          "type": "string"
+        },
+        {
+          "name": "username",
+          "type": "string"
+        },
+        {
+          "name": "email",
+          "type": "string"
+        },
+        {
+          "name": "address",
+          "type": "Address"
+        }
+      ]
+    }
+  }
+}

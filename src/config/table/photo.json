@@ -1,0 +1,36 @@
+{
+  "name": "Photos",
+  "inMenu": true,
+  "icon": "CameraOutlined",
+  "url": "/photos",
+  "page": {
+    "type": "table",
+    "options": {
+      "name": "Photos directory",
+      "initial": "https://jsonplaceholder.typicode.com/photos",
+      "rowActions": [
+        {
+          "name": "Delete",
+          "type": "call",
+          "options": {
+            "url": "api.com/delete"
+          }
+        }
+      ],
+      "fields": [
+        {
+          "name": "title",
+          "type": "string"
+        },
+        {
+          "name": "albumId",
+          "type": "string"
+        },
+        {
+          "name": "url",
+          "type": "image"
+        }
+      ]
+    }
+  }
+}

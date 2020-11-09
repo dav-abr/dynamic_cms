@@ -1,0 +1,47 @@
+{
+  "name": "Add user",
+  "inMenu": false,
+  "url": "/user/add",
+  "page": {
+    "type": "add",
+    "options": {
+      "actions": {
+        "add": {
+          "type": "call",
+          "options": {
+            "url": "https://jsonplaceholder.typicode.com/users",
+            "method": "POST",
+            "headers": {
+              "Content-type": "application/json; charset=UTF-8"
+            }
+          }
+        },
+        "reset": {
+          "type": "reset"
+        }
+      },
+      "fields": [
+        {
+          "name": "name",
+          "type": "string"
+        },
+        {
+          "name": "username",
+          "type": "string"
+        },
+        {
+          "name": "email",
+          "type": "string"
+        },
+        {
+          "name": "phone",
+          "type": "string"
+        },
+        {
+          "name": "address",
+          "type": "Address"
+        }
+      ]
+    }
+  }
+}
