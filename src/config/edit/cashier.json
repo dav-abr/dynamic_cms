@@ -1,0 +1,53 @@
+{
+  "name": "Edit cashier",
+  "inMenu": false,
+  "url": "/cashier/edit/:id",
+  "page": {
+    "type": "edit",
+    "options": {
+      "initial": {
+        "type": "router",
+        "options": {
+          "functionName": "cashierById"
+        }
+      },
+      "actions": {
+        "save": {
+          "type": "router",
+          "options": {
+            "functionName": "https://jsonplaceholder.typicode.com/users",
+            "method": "PUT",
+            "headers": {
+              "Content-type": "application/json; charset=UTF-8"
+            }
+          }
+        },
+        "reset": {
+          "type": "reset"
+        }
+      },
+      "fields": [
+        {
+          "name": "name",
+          "type": "string"
+        },
+        {
+          "name": "username",
+          "type": "string"
+        },
+        {
+          "name": "email",
+          "type": "string"
+        },
+        {
+          "name": "phone",
+          "type": "string"
+        },
+        {
+          "name": "address",
+          "type": "Address"
+        }
+      ]
+    }
+  }
+}

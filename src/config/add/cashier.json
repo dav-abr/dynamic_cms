@@ -1,0 +1,43 @@
+{
+  "name": "Add cashier",
+  "inMenu": false,
+  "url": "/cashier/add",
+  "page": {
+    "type": "add",
+    "options": {
+      "actions": {
+        "save": {
+          "type": "router",
+          "options": {
+            "functionName": "addCashier"
+          }
+        },
+        "reset": {
+          "type": "reset"
+        }
+      },
+      "fields": [
+        {
+          "name": "name",
+          "type": "string"
+        },
+        {
+          "name": "last_name",
+          "type": "string"
+        },
+        {
+          "name": "role_id",
+          "type": "string"
+        },
+        {
+          "name": "username",
+          "type": "string"
+        },
+        {
+          "name": "password",
+          "type": "string"
+        }
+      ]
+    }
+  }
+}

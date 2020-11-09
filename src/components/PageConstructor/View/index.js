@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import { useParams } from "react-router-dom";
 import { Descriptions } from "antd";
 import { toUpperCase } from "../../../helpers";
+import * as router from "../../../helpers/router";
 
 const FIELD_TYPES = {
   string: ({ value }) => <span>{value}</span>,
@@ -21,9 +22,18 @@ const View = ({ options }) => {
 
   React.useEffect(() => {
     if (options && options.initial) {
-      fetch(options.initial + `/${id}`)
-        .then((res) => res.json())
-        .then((res) => setData(res));
+      if (options.initial.type === "router") {
+        const { functionName } = options.initial.options;
+        if (router && router[functionName]) {
+          router[functionName](parseInt(id)).then((res) => {
+            setData(res);
+          });
+        }
+      } else {
+        fetch(options.initial)
+          .then((res) => res.json())
+          .then((res) => setData(res));
+      }
     }
   }, []);
 
@@ -32,7 +42,8 @@ const View = ({ options }) => {
       {fields &&
         fields.map(({ name, type }) => (
           <Descriptions.Item label={toUpperCase(name)}>
-            {data[name] &&
+            {data &&
+              data[name] &&
               type &&
               FIELD_TYPES[type] &&
               FIELD_TYPES[type]({ value: data[name] })}

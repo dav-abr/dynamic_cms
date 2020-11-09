@@ -1,0 +1,31 @@
+{
+  "name": "Cashier",
+  "inMenu": false,
+  "url": "/cashier/view/:id",
+  "page": {
+    "type": "view",
+    "options": {
+      "name": "Cashier info",
+      "initial": {
+        "type": "router",
+        "options": {
+          "functionName": "cashierById"
+        }
+      },
+      "fields": [
+        {
+          "name": "name",
+          "type": "string"
+        },
+        {
+          "name": "username",
+          "type": "string"
+        },
+        {
+          "name": "role",
+          "type": "string"
+        }
+      ]
+    }
+  }
+}

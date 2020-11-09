@@ -4,6 +4,7 @@ import { Button, Table as AntTable } from "antd";
 import { Link } from "react-router-dom";
 import "./styles.css";
 import { toUpperCase } from "../../../helpers";
+import * as router from "../../../helpers/router";
 
 const FIELD_TYPES = {
   string: ({ value }) => <span>{value}</span>,
@@ -23,9 +24,18 @@ const Table = ({ options }) => {
 
   React.useEffect(() => {
     if (options && options.initial) {
-      fetch(options.initial)
-        .then((res) => res.json())
-        .then((res) => setData(res));
+      if (options.initial.type === "router") {
+        const { functionName } = options.initial.options;
+        if (router && router[functionName]) {
+          router[functionName](1, 1, {}).then((res) => {
+            setData(res.result);
+          });
+        }
+      } else {
+        fetch(options.initial)
+          .then((res) => res.json())
+          .then((res) => setData(res));
+      }
     }
   }, []);
 
@@ -117,7 +127,7 @@ const Table = ({ options }) => {
         </div>
         <AntTable
           columns={columns}
-          dataSource={data.map((d) => ({ ...d, key: d.id }))}
+          dataSource={data && data.map((d) => ({ ...d, key: d.id }))}
         />
       </div>
     )) ||

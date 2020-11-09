@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import { useParams } from "react-router-dom";
 import { Button, Input } from "antd";
 import { toUpperCase } from "../../../helpers";
+import * as router from "../../../helpers/router";
 import "./styles.css";
 
 const FIELD_TYPES = {
@@ -52,6 +53,24 @@ const Add = ({ options }) => {
           {toUpperCase(name)}
         </Button>
       ),
+      router: ({ name, options }) => (
+        <Button
+          key={name}
+          onClick={() => {
+            if (
+              options &&
+              options.functionName &&
+              router[options.functionName]
+            ) {
+              const { functionName } = options;
+
+              router[functionName](data).then((res) => console.log({ res }));
+            }
+          }}
+        >
+          {toUpperCase(name)}
+        </Button>
+      ),
     }),
     [data]
   );
@@ -62,6 +81,8 @@ const Add = ({ options }) => {
     },
     [data]
   );
+
+  console.log({ actions });
 
   return (
     <div className="form">
@@ -81,14 +102,16 @@ const Add = ({ options }) => {
       </div>
       <div className="buttons">
         {actions &&
-          Object.keys(actions).map(
-            (key) =>
+          Object.keys(actions).map((key) => {
+            console.log({ action: ACTION_TYPES[actions[key].type] });
+            return (
               ACTION_TYPES[actions[key].type] &&
               ACTION_TYPES[actions[key].type]({
                 name: key,
                 options: actions[key].options,
               })
-          )}
+            );
+          })}
       </div>
     </div>
   );

@@ -1,0 +1,54 @@
+{
+  "name": "Cashier",
+  "inMenu": true,
+  "icon": "UserOutlined",
+  "url": "/cashiers",
+  "page": {
+    "type": "table",
+    "options": {
+      "name": "Cashiers directory",
+      "initial": {
+        "type": "router",
+        "options": {
+          "functionName": "cashiers"
+        }
+      },
+      "rowActions": [
+        {
+          "name": "View",
+          "type": "navigate",
+          "options": {
+            "url": "/cashier/view"
+          }
+        }
+      ],
+      "tableActions": [
+        {
+          "name": "Add cashier",
+          "type": "navigate",
+          "options": {
+            "url": "/cashier/add"
+          }
+        }
+      ],
+      "fields": [
+        {
+          "name": "name",
+          "type": "string"
+        },
+        {
+          "name": "last_name",
+          "type": "string"
+        },
+        {
+          "name": "username",
+          "type": "string"
+        },
+        {
+          "name": "role",
+          "type": "string"
+        }
+      ]
+    }
+  }
+}
