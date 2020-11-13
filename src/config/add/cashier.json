@@ -5,17 +5,19 @@
   "page": {
     "type": "add",
     "options": {
-      "actions": {
-        "save": {
+      "actions": [
+        {
+          "name": "save",
           "type": "router",
           "options": {
             "functionName": "addCashier"
           }
         },
-        "reset": {
+        {
+          "name": "reset",
           "type": "reset"
         }
-      },
+      ],
       "fields": [
         {
           "name": "name",
@@ -27,7 +29,17 @@
         },
         {
           "name": "role_id",
-          "type": "string"
+          "type": "select",
+          "options": {
+            "initial": {
+              "type": "router",
+              "options": {
+                "functionName": "roles"
+              }
+            },
+            "name": "name",
+            "value": "id"
+          }
         },
         {
           "name": "username",

@@ -1,13 +1,35 @@
 .table-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
     width: 100%;
     padding: 16px;
     margin-bottom: 15px;
     background-color: #fafafa;
 }
 
-.table-header > span {
+.table-title-actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.table-title-actions > span {
     font-weight: 500;
+}
+
+.table-filters {
+
+}
+
+.table-filters-col {
+    margin-bottom: 15px;
+}
+
+.table-filters-buttons {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 15px;
+}
+
+.table-filters-buttons button {
+    margin-right: 10px;
 }

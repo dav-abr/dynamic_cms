@@ -1,79 +1,15 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { useParams } from "react-router-dom";
-import { Button, Input } from "antd";
+import { Button } from "antd";
 import { toUpperCase } from "../../../helpers";
-import * as router from "../../../helpers/router";
 import "./styles.css";
-
-const FIELD_TYPES = {
-  string: ({ value, onChange }) => (
-    <Input value={value} onChange={(event) => onChange(event.target.value)} />
-  ),
-  Address: ({ value }) =>
-    value ? (
-      <span>
-        {value.street} {value.city} {value.zipcode}
-      </span>
-    ) : null,
-};
+import InlineEditor from "../InlineEditor";
+import actionHandler from "../../../helpers/actions";
 
 const Add = ({ options }) => {
   const [data, setData] = React.useState({});
 
   const { fields, actions } = options || {};
-
-  const ACTION_TYPES = React.useMemo(
-    () => ({
-      call: ({ name, options }) => (
-        <Button
-          key={name}
-          onClick={() => {
-            if (options) {
-              const { url, ...filteredOptions } = options;
-              fetch(url, {
-                ...filteredOptions,
-                body: JSON.stringify(data),
-              })
-                .then((res) => res.json())
-                .then((res) => console.log({ res }));
-            }
-          }}
-        >
-          {toUpperCase(name)}
-        </Button>
-      ),
-      reset: ({ name }) => (
-        <Button
-          key={name}
-          onClick={() => {
-            setData({});
-          }}
-        >
-          {toUpperCase(name)}
-        </Button>
-      ),
-      router: ({ name, options }) => (
-        <Button
-          key={name}
-          onClick={() => {
-            if (
-              options &&
-              options.functionName &&
-              router[options.functionName]
-            ) {
-              const { functionName } = options;
-
-              router[functionName](data).then((res) => console.log({ res }));
-            }
-          }}
-        >
-          {toUpperCase(name)}
-        </Button>
-      ),
-    }),
-    [data]
-  );
 
   const onChange = React.useCallback(
     (name, value) => {
@@ -82,36 +18,38 @@ const Add = ({ options }) => {
     [data]
   );
 
-  console.log({ actions });
-
   return (
     <div className="form">
       <div className="form-container">
         {fields &&
-          fields.map(({ name, type }) => (
+          fields.map(({ name, type, options }) => (
             <div className="form-input" key={name}>
               <label>{toUpperCase(name)}</label>
-              {type &&
-                FIELD_TYPES[type] &&
-                FIELD_TYPES[type]({
-                  value: data[name] || "",
-                  onChange: (value) => onChange(name, value),
-                })}
+              <InlineEditor
+                value={data[name]}
+                type={type}
+                onChange={(value) => onChange(name, value)}
+                options={options}
+              />
             </div>
           ))}
       </div>
       <div className="buttons">
         {actions &&
-          Object.keys(actions).map((key) => {
-            console.log({ action: ACTION_TYPES[actions[key].type] });
-            return (
-              ACTION_TYPES[actions[key].type] &&
-              ACTION_TYPES[actions[key].type]({
-                name: key,
-                options: actions[key].options,
-              })
-            );
-          })}
+          actions.map((action) => (
+            <Button
+              key={action.name}
+              onClick={() => {
+                if (action.type !== "reset") {
+                  actionHandler(action.type, action.options, [data]);
+                } else {
+                  setData({});
+                }
+              }}
+            >
+              {toUpperCase(action.name)}
+            </Button>
+          ))}
       </div>
     </div>
   );

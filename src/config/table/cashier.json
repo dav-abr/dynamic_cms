@@ -1,5 +1,5 @@
 {
-  "name": "Cashier",
+  "name": "Cashiers",
   "inMenu": true,
   "icon": "UserOutlined",
   "url": "/cashiers",
@@ -31,6 +31,39 @@
           }
         }
       ],
+      "filters": {
+        "fields": [
+          {
+            "name": "name",
+            "type": "string",
+            "options": {
+              "validators": ["required", {"max":  10}, {"pattern":  "^(?=.*?[A-Za-z])[A-Za-z+]+$"}]
+            }
+          },
+          {
+            "name": "last_name",
+            "type": "string"
+          },
+          {
+            "name": "username",
+            "type": "string"
+          },
+          {
+            "name": "role",
+            "type": "select",
+            "options": {
+              "initial": {
+                "type": "router",
+                "options": {
+                  "functionName": "roles"
+                }
+              },
+              "name": "name",
+              "value": "id"
+            }
+          }
+        ]
+      },
       "fields": [
         {
           "name": "name",
@@ -45,7 +78,7 @@
           "type": "string"
         },
         {
-          "name": "role",
+          "name": "role_name",
           "type": "string"
         }
       ]

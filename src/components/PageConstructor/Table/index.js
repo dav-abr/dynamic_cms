@@ -1,43 +1,75 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { Button, Table as AntTable } from "antd";
+import { Button, Col, Form, Row, Table as AntTable } from "antd";
 import { Link } from "react-router-dom";
-import "./styles.css";
 import { toUpperCase } from "../../../helpers";
-import * as router from "../../../helpers/router";
+import actionHandler from "../../../helpers/actions";
+import InlineEditor from "../InlineEditor";
+import { useHistory, useLocation } from "react-router-dom";
+import qs from "query-string";
+import "./styles.css";
 
 const FIELD_TYPES = {
   string: ({ value }) => <span>{value}</span>,
-  Address: ({ value }) => <span>{value.street}</span>,
-  image: ({ value }) => (
-    <img
-      style={{ width: "50px", height: "50px", objectFit: "contain" }}
-      src={value}
-    />
-  ),
 };
 
 const Table = ({ options }) => {
   const [data, setData] = React.useState([]);
-
-  const { name, fields, rowActions, tableActions } = options || {};
+  const history = useHistory();
+  const location = useLocation();
+  const formRef = React.useRef();
+  const { name, fields, rowActions, tableActions, filters: tableFilters } =
+    options || {};
 
   React.useEffect(() => {
+    const queryFilters = qs.parse(location.search, { parseNumbers: true });
+    formRef.current.setFieldsValue(queryFilters);
+
     if (options && options.initial) {
-      if (options.initial.type === "router") {
-        const { functionName } = options.initial.options;
-        if (router && router[functionName]) {
-          router[functionName](1, 1, {}).then((res) => {
-            setData(res.result);
-          });
-        }
-      } else {
-        fetch(options.initial)
-          .then((res) => res.json())
-          .then((res) => setData(res));
-      }
+      const { initial } = options;
+      actionHandler(initial.type, initial.options).then((res) => {
+        setData(res.result);
+      });
     }
   }, []);
+
+  const onFilterChange = React.useCallback(
+    (name, value) => {
+      formRef.current.setFieldsValue({
+        [name]: value,
+      });
+    },
+    [formRef]
+  );
+
+  const onSearch = React.useCallback((values) => {
+    history.push({
+      search: qs.stringify(values, { skipEmptyString: true, skipNull: true }),
+    });
+
+    if (options && options.initial) {
+      const { initial } = options;
+      actionHandler(initial.type, initial.options, [1, 1, values]).then(
+        (res) => {
+          setData(res.result);
+        }
+      );
+    }
+  }, []);
+
+  const onReset = React.useCallback(() => {
+    formRef.current.resetFields();
+    history.push({
+      search: "",
+    });
+
+    if (options && options.initial) {
+      const { initial } = options;
+      actionHandler(initial.type, initial.options, [1, 1, {}]).then((res) => {
+        setData(res.result);
+      });
+    }
+  }, [formRef]);
 
   const renderField = React.useCallback((type, value) => {
     return type && FIELD_TYPES[type] && FIELD_TYPES[type]({ value });
@@ -117,12 +149,59 @@ const Table = ({ options }) => {
     (fields && (
       <div>
         <div className="table-header">
-          <span>{name}</span>
-          <div className="table-buttons">
-            {tableActions &&
-              tableActions.map((action) =>
-                renderTableAction(action.name, action.type, action.options)
-              )}
+          <div className="table-title-actions">
+            <span>{name}</span>
+            <div className="table-buttons">
+              {tableActions &&
+                tableActions.map((action) =>
+                  renderTableAction(action.name, action.type, action.options)
+                )}
+            </div>
+          </div>
+          <div className="table-filters">
+            {tableFilters && tableFilters.fields && (
+              <Form name={name} onFinish={onSearch} ref={formRef}>
+                <Row gutter={16}>
+                  {tableFilters.fields.map(({ name, type, options }) => (
+                    <Col span={12} key={name} className="table-filters-col">
+                      <Form.Item
+                        name={name}
+                        label={toUpperCase(name)}
+                        rules={
+                          options &&
+                          options.validators &&
+                          options.validators.map((validator) =>
+                            typeof validator === "string"
+                              ? {
+                                  [validator]: true,
+                                }
+                              : validator
+                          )
+                        }
+                      >
+                        <InlineEditor
+                          type={type}
+                          onChange={(value) => onFilterChange(name, value)}
+                          options={options}
+                        />
+                      </Form.Item>
+                    </Col>
+                  ))}
+                </Row>
+                <div className="table-filters-buttons">
+                  <Form.Item>
+                    <Button type="primary" htmlType="submit">
+                      Search
+                    </Button>
+                  </Form.Item>
+                  <Form.Item>
+                    <Button onClick={onReset} htmlType="button">
+                      Reset
+                    </Button>
+                  </Form.Item>
+                </div>
+              </Form>
+            )}
           </div>
         </div>
         <AntTable
