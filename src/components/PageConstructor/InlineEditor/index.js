@@ -25,14 +25,15 @@ const FIELDS = {
         value={value || null}
         style={{ width: "100%" }}
       >
-        {values.map((value) => (
-          <Select.Option
-            value={value[options.value]}
-            key={value[options.value]}
-          >
-            {value[options.name]}
-          </Select.Option>
-        ))}
+        {values &&
+          values.map((value) => (
+            <Select.Option
+              value={value[options.value]}
+              key={value[options.value]}
+            >
+              {value[options.name]}
+            </Select.Option>
+          ))}
       </Select>
     );
   },

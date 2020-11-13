@@ -1,0 +1,62 @@
+{
+  "name": "Products",
+  "inMenu": true,
+  "icon": "ShoppingOutlined",
+  "url": "/products",
+  "page": {
+    "type": "table",
+    "options": {
+      "name": "Products directory",
+      "initial": {
+        "type": "router",
+        "options": {
+          "functionName": "products"
+        }
+      },
+      "filters": {
+        "fields": [
+          {
+            "name": "name",
+            "type": "string"
+          },
+          {
+            "name": "article",
+            "type": "string"
+          },
+          {
+            "name": "tt",
+            "type": "string"
+          },
+          {
+            "name": "mu",
+            "type": "string"
+          },
+          {
+            "name": "category",
+            "type": "select",
+            "options": {
+              "initial": {
+                "type": "router",
+                "options": {
+                  "functionName": "categories"
+                }
+              },
+              "name": "name",
+              "value": "id"
+            }
+          }
+        ]
+      },
+      "fields": [
+        {"name": "tt", "type": "string"},
+        {"name": "mu", "type": "string"},
+        {"name": "category", "type": "string"},
+        {"name": "article", "type": "string"},
+        {"name": "name", "type": "string"},
+        {"name": "description", "type": "string"},
+        {"name": "ts", "type": "string"},
+        {"name": "deleted", "type": "boolean"}
+      ]
+    }
+  }
+}

@@ -10,7 +10,7 @@ export default function actionHandler(type, options = {}, args = []) {
         console.log("router", { type, options, args });
         return router[functionName](...args);
       } else {
-        return null;
+        return new Promise((resolve) => resolve({}));
       }
       break;
   }

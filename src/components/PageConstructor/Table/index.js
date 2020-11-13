@@ -11,6 +11,7 @@ import "./styles.css";
 
 const FIELD_TYPES = {
   string: ({ value }) => <span>{value}</span>,
+  boolean: ({ value }) => <span>{value.toString()}</span>,
 };
 
 const Table = ({ options }) => {
@@ -132,15 +133,17 @@ const Table = ({ options }) => {
           key: name,
           render: (text, data) => renderField(type, data[name]),
         })),
-        {
-          title: "Action",
-          key: "action",
-          render: (text, data) =>
-            rowActions &&
-            rowActions.map((action) =>
-              renderRowAction(action.name, action.type, action.options, data)
-            ),
-        },
+        (rowActions &&
+          rowActions.length && {
+            title: "Action",
+            key: "action",
+            render: (text, data) =>
+              rowActions &&
+              rowActions.map((action) =>
+                renderRowAction(action.name, action.type, action.options, data)
+              ),
+          }) ||
+          {},
       ],
     [fields, rowActions]
   );
