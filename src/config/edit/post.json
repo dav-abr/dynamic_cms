@@ -1,0 +1,41 @@
+{
+  "name": "Edit post",
+  "inMenu": false,
+  "url": "/post/edit/:id",
+  "page": {
+    "type": "edit",
+    "options": {
+      "initial": {
+        "type": "call",
+        "options": {
+          "name": "jsonplaceholder",
+          "route": "posts_get"
+        }
+      },
+      "actions": [
+        {
+          "name": "save",
+          "type": "call",
+          "options": {
+            "name": "jsonplaceholder",
+            "route": "posts_edit"
+          }
+        },
+        {
+          "name": "reset",
+          "type": "reset"
+        }
+      ],
+      "fields": [
+        {
+          "name": "title",
+          "type": "string"
+        },
+        {
+          "name": "body",
+          "type": "string"
+        }
+      ]
+    }
+  }
+}

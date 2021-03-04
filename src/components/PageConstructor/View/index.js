@@ -4,6 +4,7 @@ import { useParams } from "react-router-dom";
 import { Descriptions } from "antd";
 import { toUpperCase } from "../../../helpers";
 import * as router from "../../../helpers/router";
+import actionHandler from "../../../helpers/actions";
 
 const FIELD_TYPES = {
   string: ({ value }) => <span>{value}</span>,
@@ -30,9 +31,11 @@ const View = ({ options }) => {
           });
         }
       } else {
-        fetch(options.initial)
-          .then((res) => res.json())
-          .then((res) => setData(res));
+        actionHandler(options.initial.type, options.initial.options, {
+          params: { id },
+        }).then((res) => {
+          setData(res);
+        });
       }
     }
   }, []);

@@ -1,0 +1,34 @@
+{
+  "jsonplaceholder": {
+    "name": "jsonplaceholder",
+    "baseURL": "https://jsonplaceholder.typicode.com",
+    "routes": {
+      "posts_get_all": {
+        "name": "posts_get_all",
+        "URL": "/posts",
+        "method": "GET",
+        "responseField": ""
+      },
+      "posts_get": {
+        "name": "posts_get",
+        "URL": "/posts/[id]",
+        "method": "GET"
+      },
+      "posts_add": {
+        "name": "posts_get",
+        "URL": "/posts",
+        "method": "POST"
+      },
+      "posts_edit": {
+        "name": "posts_get",
+        "URL": "/posts/[id]",
+        "method": "PUT"
+      },
+      "users_get_all": {
+        "name": "users_get_all",
+        "URL": "/users",
+        "method": "GET"
+      }
+    }
+  }
+}

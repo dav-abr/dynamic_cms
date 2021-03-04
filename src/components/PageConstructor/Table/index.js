@@ -29,7 +29,7 @@ const Table = ({ options }) => {
     if (options && options.initial) {
       const { initial } = options;
       actionHandler(initial.type, initial.options).then((res) => {
-        setData(res.result);
+        setData(res);
       });
     }
   }, []);
@@ -50,9 +50,9 @@ const Table = ({ options }) => {
 
     if (options && options.initial) {
       const { initial } = options;
-      actionHandler(initial.type, initial.options, [1, 1, values]).then(
+      actionHandler(initial.type, initial.options, { search: values }).then(
         (res) => {
-          setData(res.result);
+          setData(res);
         }
       );
     }
@@ -67,7 +67,7 @@ const Table = ({ options }) => {
     if (options && options.initial) {
       const { initial } = options;
       actionHandler(initial.type, initial.options, [1, 1, {}]).then((res) => {
-        setData(res.result);
+        setData(res);
       });
     }
   }, [formRef]);

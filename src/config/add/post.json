@@ -1,0 +1,34 @@
+{
+  "name": "Add post",
+  "inMenu": false,
+  "url": "/post/add",
+  "page": {
+    "type": "add",
+    "options": {
+      "actions": [
+        {
+          "name": "save",
+          "type": "call",
+          "options": {
+            "name": "jsonplaceholder",
+            "route": "posts_add"
+          }
+        },
+        {
+          "name": "reset",
+          "type": "reset"
+        }
+      ],
+      "fields": [
+        {
+          "name": "title",
+          "type": "string"
+        },
+        {
+          "name": "body",
+          "type": "string"
+        }
+      ]
+    }
+  }
+}

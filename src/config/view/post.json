@@ -1,0 +1,32 @@
+{
+  "name": "Post",
+  "inMenu": false,
+  "url": "/post/view/:id",
+  "page": {
+    "type": "view",
+    "options": {
+      "name": "Post info",
+      "initial": {
+        "type": "call",
+        "options": {
+          "name": "jsonplaceholder",
+          "route": "posts_get"
+        }
+      },
+      "fields": [
+        {
+          "name": "id",
+          "type": "string"
+        },
+        {
+          "name": "title",
+          "type": "string"
+        },
+        {
+          "name": "body",
+          "type": "string"
+        }
+      ]
+    }
+  }
+}

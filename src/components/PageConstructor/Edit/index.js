@@ -4,6 +4,7 @@ import { useParams } from "react-router-dom";
 import { Button, Input } from "antd";
 import { toUpperCase } from "../../../helpers";
 import "./styles.css";
+import actionHandler from "../../../helpers/actions";
 
 const FIELD_TYPES = {
   string: ({ value, onChange }) => (
@@ -25,48 +26,14 @@ const Edit = ({ options }) => {
 
   const { fields, actions } = options || {};
 
-  const ACTION_TYPES = React.useMemo(
-    () => ({
-      call: ({ name, options }) => (
-        <Button
-          key={name}
-          onClick={() => {
-            if (options) {
-              const { url, ...filteredOptions } = options;
-              fetch(url + `/${id}`, {
-                ...filteredOptions,
-                body: JSON.stringify(data),
-              })
-                .then((res) => res.json())
-                .then((res) => console.log({ res }));
-            }
-          }}
-        >
-          {toUpperCase(name)}
-        </Button>
-      ),
-      reset: ({ name }) => (
-        <Button
-          key={name}
-          onClick={() => {
-            setData(initialData);
-          }}
-        >
-          {toUpperCase(name)}
-        </Button>
-      ),
-    }),
-    [data]
-  );
-
   React.useEffect(() => {
     if (options.initial) {
-      fetch(options.initial + `/${id}`)
-        .then((res) => res.json())
-        .then((res) => {
-          setData(res);
-          initialData = res;
-        });
+      actionHandler(options.initial.type, options.initial.options, {
+        params: { id },
+      }).then((res) => {
+        setData(res);
+        initialData = { ...res };
+      });
     }
   }, []);
 
@@ -95,14 +62,22 @@ const Edit = ({ options }) => {
       </div>
       <div className="buttons">
         {actions &&
-          Object.keys(actions).map(
-            (key) =>
-              ACTION_TYPES[actions[key].type] &&
-              ACTION_TYPES[actions[key].type]({
-                name: key,
-                options: actions[key].options,
-              })
-          )}
+          actions.map((action) => (
+            <Button
+              key={action.name}
+              onClick={() => {
+                if (action.type !== "reset") {
+                  actionHandler(action.type, action.options, {
+                    params: { body: data, id },
+                  });
+                } else {
+                  setData(initialData);
+                }
+              }}
+            >
+              {toUpperCase(action.name)}
+            </Button>
+          ))}
       </div>
     </div>
   );

@@ -1,9 +1,13 @@
 import React from "react";
 import PropTypes from "prop-types";
-import Table from "./Table";
-import View from "./View";
-import Edit from "./Edit";
-import Add from "./Add";
+const Table = React.lazy(() => import("./Table"));
+const View = React.lazy(() => import("./View"));
+const Edit = React.lazy(() => import("./Edit"));
+const Add = React.lazy(() => import("./Add"));
+// import Table from "./Table";
+// import View from "./View";
+// import Edit from "./Edit";
+// import Add from "./Add";
 
 const table = ({ options }) => <Table options={options} />;
 const view = ({ options }) => <View options={options} />;
@@ -18,7 +22,6 @@ const PAGES = {
 };
 
 const PageConstructor = ({ type, options }) => {
-  console.log({ type, options });
   return (
     <div>
       {type &&

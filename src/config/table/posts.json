@@ -1,0 +1,88 @@
+{
+  "name": "Posts",
+  "inMenu": true,
+  "icon": "UserOutlined",
+  "url": "/posts",
+  "page": {
+    "type": "table",
+    "options": {
+      "name": "Posts directory",
+      "initial": {
+        "type": "call",
+        "options": {
+          "name": "jsonplaceholder",
+          "route": "posts_get_all"
+        }
+      },
+      "tableActions": [
+        {
+          "name": "Add post",
+          "type": "navigate",
+          "options": {
+            "url": "/post/add"
+          }
+        }
+      ],
+      "rowActions": [
+        {
+          "name": "View",
+          "type": "navigate",
+          "options": {
+            "url": "/post/view"
+          }
+        },
+        {
+          "name": "Edit",
+          "type": "navigate",
+          "options": {
+            "url": "/post/edit"
+          }
+        }
+      ],
+      "filters": {
+        "fields": [
+          {
+            "name": "title",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "type": "string",
+            "options": {
+              "validators": [{"max":  100}]
+            }
+          },
+          {
+            "name": "userId",
+            "type": "select",
+            "options": {
+              "initial": {
+                "type": "call",
+                "options": {
+                  "name": "jsonplaceholder",
+                  "route": "users_get_all"
+                }
+              },
+              "name": "name",
+              "value": "id"
+            }
+          }
+        ]
+      },
+      "fields": [
+        {
+          "name": "id",
+          "type": "string"
+        },
+        {
+          "name": "title",
+          "type": "string"
+        },
+        {
+          "name": "body",
+          "type": "string"
+        }
+      ]
+    }
+  }
+}

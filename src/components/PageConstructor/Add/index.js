@@ -41,7 +41,9 @@ const Add = ({ options }) => {
               key={action.name}
               onClick={() => {
                 if (action.type !== "reset") {
-                  actionHandler(action.type, action.options, [data]);
+                  actionHandler(action.type, action.options, {
+                    params: { body: data },
+                  });
                 } else {
                   setData({});
                 }
