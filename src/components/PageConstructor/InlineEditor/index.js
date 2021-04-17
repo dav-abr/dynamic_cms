@@ -26,6 +26,7 @@ const FIELDS = {
         style={{ width: "100%" }}
       >
         {values &&
+          Array.isArray(values) &&
           values.map((value) => (
             <Select.Option
               value={value[options.value]}

@@ -3,12 +3,13 @@ import apiSettings from "../config/api/settings.json";
 import queryString from "query-string";
 
 export default function actionHandler(type, options = {}, args = {}) {
+  const { search = {}, params = {} } = args;
+
   switch (type) {
     case "call":
       const { name, route } = options;
-      const { search, params } = args;
       const settings = apiSettings[name];
-      const routeSettings = apiSettings[name].routes[route];
+      const routeSettings = apiSettings[name].routes[route] || {};
       const baseURL = settings.baseURL;
       let routeURL = routeSettings.URL;
       const searchParams = queryString.stringify(search, {
@@ -30,6 +31,7 @@ export default function actionHandler(type, options = {}, args = {}) {
 
       const callParams = {
         method: routeSettings.method || "GET",
+        headers: routeSettings.headers || {},
       };
 
       if (["POST", "PUT"].includes(routeSettings.method) && params?.body) {
@@ -44,10 +46,13 @@ export default function actionHandler(type, options = {}, args = {}) {
           return res.json();
         }
       });
-      break;
     case "navigate":
-      args.params.history.push(options.url);
-      break;
+      return args.params.history.push(
+        options.url.replace(
+          /\[\w+\]/gm,
+          (match) => params[match.slice(1, match.length - 1)] || ""
+        )
+      );
     case "router":
       const { functionName } = options;
       if (router && router[functionName]) {
@@ -55,6 +60,5 @@ export default function actionHandler(type, options = {}, args = {}) {
       } else {
         return new Promise((resolve) => resolve({}));
       }
-      break;
   }
 }

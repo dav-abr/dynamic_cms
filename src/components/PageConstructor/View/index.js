@@ -44,7 +44,7 @@ const View = ({ options }) => {
     <Descriptions title={name} bordered>
       {fields &&
         fields.map(({ name, type }) => (
-          <Descriptions.Item label={toUpperCase(name)}>
+          <Descriptions.Item label={toUpperCase(name)} key={name}>
             {data &&
               data[name] &&
               type &&

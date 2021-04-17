@@ -1,7 +1,7 @@
 {
   "jsonplaceholder": {
     "name": "jsonplaceholder",
-    "baseURL": "https://jsonplaceholder.typicode.com",
+    "baseURL": "http://localhost:3001",
     "routes": {
       "posts_get_all": {
         "name": "posts_get_all",
@@ -15,14 +15,25 @@
         "method": "GET"
       },
       "posts_add": {
-        "name": "posts_get",
+        "name": "posts_add",
         "URL": "/posts",
-        "method": "POST"
+        "method": "POST",
+        "headers": {
+          "Content-Type": "application/json"
+        }
       },
       "posts_edit": {
-        "name": "posts_get",
+        "name": "posts_edit",
         "URL": "/posts/[id]",
-        "method": "PUT"
+        "method": "PUT",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      },
+      "posts_delete": {
+        "name": "posts_delete",
+        "URL": "/posts/[id]",
+        "method": "DELETE"
       },
       "users_get_all": {
         "name": "users_get_all",

@@ -11,23 +11,35 @@ import "./styles.css";
 
 const Table = ({ options }) => {
   const [data, setData] = React.useState([]);
+  const [filters, setFilters] = React.useState({});
   const history = useHistory();
   const location = useLocation();
   const formRef = React.useRef();
   const { name, fields, rowActions, tableActions, filters: tableFilters } =
     options || {};
 
+  const updateTable = React.useCallback(() => {
+    if (options && options.initial) {
+      const { initial } = options;
+      actionHandler(initial.type, initial.options, { search: filters }).then(
+        (res) => {
+          setData(res);
+        }
+      );
+    }
+  }, [options, filters]);
+
   React.useEffect(() => {
     const queryFilters = qs.parse(location.search, { parseNumbers: true });
     formRef.current.setFieldsValue(queryFilters);
+    setFilters(queryFilters);
 
-    if (options && options.initial) {
-      const { initial } = options;
-      actionHandler(initial.type, initial.options).then((res) => {
-        setData(res);
-      });
-    }
+    updateTable();
   }, []);
+
+  React.useEffect(() => {
+    updateTable();
+  }, [filters]);
 
   const onFilterChange = React.useCallback(
     (name, value) => {
@@ -39,18 +51,14 @@ const Table = ({ options }) => {
   );
 
   const onSearch = React.useCallback((values) => {
-    history.push({
-      search: qs.stringify(values, { skipEmptyString: true, skipNull: true }),
+    const currentFilters = qs.stringify(values, {
+      skipEmptyString: true,
+      skipNull: true,
     });
-
-    if (options && options.initial) {
-      const { initial } = options;
-      actionHandler(initial.type, initial.options, { search: values }).then(
-        (res) => {
-          setData(res);
-        }
-      );
-    }
+    history.push({
+      search: currentFilters,
+    });
+    setFilters(values);
   }, []);
 
   const onReset = React.useCallback(() => {
@@ -59,46 +67,32 @@ const Table = ({ options }) => {
       search: "",
     });
 
-    if (options && options.initial) {
-      const { initial } = options;
-      actionHandler(initial.type, initial.options, [1, 1, {}]).then((res) => {
-        setData(res);
-      });
-    }
+    setFilters({});
   }, [formRef]);
 
   const renderField = React.useCallback((type, value) => {
     return <InlineViewer value={value} type={type} />;
   }, []);
 
-  const renderRowAction = React.useCallback((name, type, options, data) => {
-    if (type === "call") {
-      return (
-        <a
-          key={name}
-          onClick={() => {
-            console.log(type, name);
-          }}
-          style={{ marginRight: "10px" }}
-        >
-          {name}
-        </a>
-      );
-    } else if (type === "navigate") {
-      return (
-        <Link
-          key={name}
-          to={options && options.url + `/${data.id}`}
-          style={{ marginRight: "10px" }}
-        >
-          {name}
-        </Link>
-      );
-    }
-  }, []);
+  const renderRowAction = React.useCallback(
+    (name, type, options, data) => (
+      <a
+        key={name}
+        onClick={() => {
+          actionHandler(type, options, {
+            params: { id: data.id, history },
+          })?.then(updateTable);
+        }}
+        style={{ marginRight: "10px" }}
+      >
+        {name}
+      </a>
+    ),
+    []
+  );
 
-  const renderTableAction = React.useCallback((name, type, options) => {
-    return (
+  const renderTableAction = React.useCallback(
+    (name, type, options) => (
       <Button
         key={name}
         onClick={() => {
@@ -108,8 +102,9 @@ const Table = ({ options }) => {
       >
         {name}
       </Button>
-    );
-  }, []);
+    ),
+    []
+  );
 
   const columns = React.useMemo(
     () =>
@@ -196,7 +191,11 @@ const Table = ({ options }) => {
         </div>
         <AntTable
           columns={columns}
-          dataSource={data && data.map((d) => ({ ...d, key: d.id }))}
+          dataSource={
+            data &&
+            Array.isArray(data) &&
+            data.map((d) => ({ ...d, key: d.id }))
+          }
         />
       </div>
     )) ||

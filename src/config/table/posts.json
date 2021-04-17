@@ -28,14 +28,22 @@
           "name": "View",
           "type": "navigate",
           "options": {
-            "url": "/post/view"
+            "url": "/post/view/[id]"
           }
         },
         {
           "name": "Edit",
           "type": "navigate",
           "options": {
-            "url": "/post/edit"
+            "url": "/post/edit/[id]"
+          }
+        },
+        {
+          "name": "Delete",
+          "type": "call",
+          "options": {
+            "name": "jsonplaceholder",
+            "route": "posts_delete"
           }
         }
       ],

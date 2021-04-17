@@ -44,6 +44,19 @@ const Edit = ({ options }) => {
     [data]
   );
 
+  const onSave = React.useCallback(
+    (action) => {
+      if (action.type !== "reset") {
+        actionHandler(action.type, action.options, {
+          params: { body: data, id },
+        });
+      } else {
+        setData(initialData);
+      }
+    },
+    [data, id]
+  );
+
   return (
     <div className="form">
       <div className="form-container">
@@ -63,18 +76,7 @@ const Edit = ({ options }) => {
       <div className="buttons">
         {actions &&
           actions.map((action) => (
-            <Button
-              key={action.name}
-              onClick={() => {
-                if (action.type !== "reset") {
-                  actionHandler(action.type, action.options, {
-                    params: { body: data, id },
-                  });
-                } else {
-                  setData(initialData);
-                }
-              }}
-            >
+            <Button key={action.name} onClick={() => onSave(action)}>
               {toUpperCase(action.name)}
             </Button>
           ))}
