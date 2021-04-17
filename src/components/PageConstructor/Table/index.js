@@ -1,18 +1,13 @@
 import React from "react";
 import PropTypes from "prop-types";
+import qs from "query-string";
+import { useHistory, useLocation, Link } from "react-router-dom";
 import { Button, Col, Form, Row, Table as AntTable } from "antd";
-import { Link } from "react-router-dom";
+import InlineEditor from "../InlineEditor";
+import InlineViewer from "../InlineViewer";
 import { toUpperCase } from "../../../helpers";
 import actionHandler from "../../../helpers/actions";
-import InlineEditor from "../InlineEditor";
-import { useHistory, useLocation } from "react-router-dom";
-import qs from "query-string";
 import "./styles.css";
-
-const FIELD_TYPES = {
-  string: ({ value }) => <span>{value}</span>,
-  boolean: ({ value }) => <span>{value.toString()}</span>,
-};
 
 const Table = ({ options }) => {
   const [data, setData] = React.useState([]);
@@ -73,7 +68,7 @@ const Table = ({ options }) => {
   }, [formRef]);
 
   const renderField = React.useCallback((type, value) => {
-    return type && FIELD_TYPES[type] && FIELD_TYPES[type]({ value });
+    return <InlineViewer value={value} type={type} />;
   }, []);
 
   const renderRowAction = React.useCallback((name, type, options, data) => {
@@ -103,25 +98,17 @@ const Table = ({ options }) => {
   }, []);
 
   const renderTableAction = React.useCallback((name, type, options) => {
-    if (type === "call") {
-      return (
-        <Button
-          key={name}
-          onClick={() => {
-            console.log(type, name);
-          }}
-          style={{ marginRight: "10px" }}
-        >
-          {name}
-        </Button>
-      );
-    } else if (type === "navigate") {
-      return (
-        <Link key={name} to={options.url} style={{ marginRight: "10px" }}>
-          <Button>{name}</Button>
-        </Link>
-      );
-    }
+    return (
+      <Button
+        key={name}
+        onClick={() => {
+          actionHandler(type, options, { params: { history } });
+        }}
+        style={{ marginRight: "10px" }}
+      >
+        {name}
+      </Button>
+    );
   }, []);
 
   const columns = React.useMemo(

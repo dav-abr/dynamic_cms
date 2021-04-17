@@ -1,7 +1,7 @@
 {
   "name": "Posts",
   "inMenu": true,
-  "icon": "UserOutlined",
+  "icon": "FileOutlined",
   "url": "/posts",
   "page": {
     "type": "table",

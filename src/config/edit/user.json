@@ -1,0 +1,57 @@
+{
+  "name": "Edit user",
+  "inMenu": false,
+  "url": "/user/edit/:id",
+  "page": {
+    "type": "edit",
+    "options": {
+      "initial": {
+        "type": "call",
+        "options": {
+          "name": "jsonplaceholder",
+          "route": "users_get"
+        }
+      },
+      "actions": [
+        {
+          "name": "save",
+          "type": "call",
+          "options": {
+            "name": "jsonplaceholder",
+            "route": "users_edit"
+          }
+        },
+        {
+          "name": "reset",
+          "type": "reset"
+        }
+      ],
+      "fields": [
+        {
+          "name": "name",
+          "type": "string"
+        },
+        {
+          "name": "username",
+          "type": "string"
+        },
+        {
+          "name": "email",
+          "type": "string"
+        },
+        {
+          "name": "phone",
+          "type": "string"
+        },
+        {
+          "name": "website",
+          "type": "string"
+        },
+        {
+          "name": "address",
+          "type": "address"
+        }
+      ]
+    }
+  }
+}

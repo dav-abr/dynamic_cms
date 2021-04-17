@@ -1,0 +1,98 @@
+{
+  "name": "Users",
+  "inMenu": true,
+  "icon": "IdcardOutlined",
+  "url": "/users",
+  "page": {
+    "type": "table",
+    "options": {
+      "name": "Users directory",
+      "initial": {
+        "type": "call",
+        "options": {
+          "name": "jsonplaceholder",
+          "route": "users_get_all"
+        }
+      },
+      "tableActions": [
+        {
+          "name": "Add user",
+          "type": "navigate",
+          "options": {
+            "url": "/user/add"
+          }
+        }
+      ],
+      "rowActions": [
+        {
+          "name": "View",
+          "type": "navigate",
+          "options": {
+            "url": "/user/view"
+          }
+        },
+        {
+          "name": "Edit",
+          "type": "navigate",
+          "options": {
+            "url": "/user/edit"
+          }
+        }
+      ],
+      "filters": {
+        "fields": [
+          {
+            "name": "name",
+            "type": "string"
+          },
+          {
+            "name": "username",
+            "type": "string"
+          },
+          {
+            "name": "email",
+            "type": "string"
+          },
+          {
+            "name": "phone",
+            "type": "string"
+          },
+          {
+            "name": "website",
+            "type": "string"
+          }
+        ]
+      },
+      "fields": [
+        {
+          "name": "id",
+          "type": "string"
+        },
+        {
+          "name": "name",
+          "type": "string"
+        },
+        {
+          "name": "username",
+          "type": "string"
+        },
+        {
+          "name": "email",
+          "type": "string"
+        },
+        {
+          "name": "phone",
+          "type": "string"
+        },
+        {
+          "name": "website",
+          "type": "website"
+        },
+        {
+          "name": "address",
+          "type": "address"
+        }
+      ]
+    }
+  }
+}

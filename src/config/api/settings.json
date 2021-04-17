@@ -28,6 +28,21 @@
         "name": "users_get_all",
         "URL": "/users",
         "method": "GET"
+      },
+      "users_get": {
+        "name": "users_get",
+        "URL": "/users/[id]",
+        "method": "GET"
+      },
+      "users_edit": {
+        "name": "users_edit",
+        "URL": "/users/[id]",
+        "method": "PUT"
+      },
+      "users_add": {
+        "name": "users_add",
+        "URL": "/users",
+        "method": "POST"
       }
     }
   }

@@ -1,0 +1,48 @@
+{
+  "name": "User",
+  "inMenu": false,
+  "url": "/user/view/:id",
+  "page": {
+    "type": "view",
+    "options": {
+      "name": "User info",
+      "initial": {
+        "type": "call",
+        "options": {
+          "name": "jsonplaceholder",
+          "route": "users_get"
+        }
+      },
+      "fields": [
+        {
+          "name": "id",
+          "type": "string"
+        },
+        {
+          "name": "name",
+          "type": "string"
+        },
+        {
+          "name": "username",
+          "type": "string"
+        },
+        {
+          "name": "email",
+          "type": "string"
+        },
+        {
+          "name": "phone",
+          "type": "string"
+        },
+        {
+          "name": "website",
+          "type": "string"
+        },
+        {
+          "name": "address",
+          "type": "address"
+        }
+      ]
+    }
+  }
+}

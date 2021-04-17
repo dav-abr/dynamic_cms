@@ -45,6 +45,9 @@ export default function actionHandler(type, options = {}, args = {}) {
         }
       });
       break;
+    case "navigate":
+      args.params.history.push(options.url);
+      break;
     case "router":
       const { functionName } = options;
       if (router && router[functionName]) {

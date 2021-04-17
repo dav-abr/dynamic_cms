@@ -1,0 +1,46 @@
+{
+  "name": "Add user",
+  "inMenu": false,
+  "url": "/user/add",
+  "page": {
+    "type": "add",
+    "options": {
+      "actions": [
+        {
+          "name": "save",
+          "type": "call",
+          "options": {
+            "name": "jsonplaceholder",
+            "route": "users_add"
+          }
+        },
+        {
+          "name": "reset",
+          "type": "reset"
+        }
+      ],
+      "fields": [
+        {
+          "name": "name",
+          "type": "string"
+        },
+        {
+          "name": "username",
+          "type": "string"
+        },
+        {
+          "name": "email",
+          "type": "string"
+        },
+        {
+          "name": "phone",
+          "type": "string"
+        },
+        {
+          "name": "website",
+          "type": "string"
+        }
+      ]
+    }
+  }
+}
