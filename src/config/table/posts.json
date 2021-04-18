@@ -7,6 +7,7 @@
     "type": "table",
     "options": {
       "name": "Posts directory",
+      "pagination": true,
       "initial": {
         "type": "call",
         "options": {

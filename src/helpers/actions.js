@@ -3,19 +3,32 @@ import apiSettings from "../config/api/settings.json";
 import queryString from "query-string";
 
 export default function actionHandler(type, options = {}, args = {}) {
-  const { search = {}, params = {} } = args;
+  const { params = {} } = args;
 
   switch (type) {
     case "call":
       const { name, route } = options;
+      const { search = {} } = args;
+      let { pagination = {} } = args;
       const settings = apiSettings[name];
       const routeSettings = apiSettings[name].routes[route] || {};
       const baseURL = settings.baseURL;
       let routeURL = routeSettings.URL;
-      const searchParams = queryString.stringify(search, {
-        skipNull: true,
-        skipEmptyString: true,
-      });
+
+      if (routeSettings.pagination) {
+        pagination = {
+          [routeSettings.pagination.page]: pagination.page,
+          [routeSettings.pagination.size]: pagination.size,
+        };
+      }
+
+      const urlParams = queryString.stringify(
+        { ...search, ...pagination },
+        {
+          skipNull: true,
+          skipEmptyString: true,
+        }
+      );
 
       if (params) {
         for (const key of Object.keys(params)) {
@@ -25,8 +38,8 @@ export default function actionHandler(type, options = {}, args = {}) {
 
       let callURL = baseURL + routeURL;
 
-      if (searchParams) {
-        callURL += "?" + searchParams;
+      if (urlParams) {
+        callURL += "?" + urlParams;
       }
 
       const callParams = {

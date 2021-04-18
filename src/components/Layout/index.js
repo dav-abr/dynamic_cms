@@ -14,7 +14,7 @@ const Layout = () => {
 
   const onCollapse = React.useCallback((value) => {
     setCollapsed(value);
-  });
+  }, []);
 
   return (
     <AntLayout style={{ minHeight: "100vh" }}>

@@ -7,7 +7,11 @@
         "name": "posts_get_all",
         "URL": "/posts",
         "method": "GET",
-        "responseField": ""
+        "responseField": "",
+        "pagination": {
+          "page": "_page",
+          "size": "_limit"
+        }
       },
       "posts_get": {
         "name": "posts_get",

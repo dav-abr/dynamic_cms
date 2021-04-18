@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import qs from "query-string";
-import { useHistory, useLocation, Link } from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
 import { Button, Col, Form, Row, Table as AntTable } from "antd";
 import InlineEditor from "../InlineEditor";
 import InlineViewer from "../InlineViewer";
@@ -12,22 +12,33 @@ import "./styles.css";
 const Table = ({ options }) => {
   const [data, setData] = React.useState([]);
   const [filters, setFilters] = React.useState({});
+  const [pagination, setPagination] = React.useState({
+    page: 1,
+    size: 10,
+  });
   const history = useHistory();
   const location = useLocation();
   const formRef = React.useRef();
-  const { name, fields, rowActions, tableActions, filters: tableFilters } =
-    options || {};
+  const {
+    name,
+    fields,
+    rowActions,
+    tableActions,
+    filters: tableFilters,
+    pagination: tablePagination,
+  } = options || {};
 
   const updateTable = React.useCallback(() => {
     if (options && options.initial) {
       const { initial } = options;
-      actionHandler(initial.type, initial.options, { search: filters }).then(
-        (res) => {
-          setData(res);
-        }
-      );
+      actionHandler(initial.type, initial.options, {
+        search: filters,
+        pagination,
+      }).then((res) => {
+        setData(res);
+      });
     }
-  }, [options, filters]);
+  }, [options, filters, pagination]);
 
   React.useEffect(() => {
     const queryFilters = qs.parse(location.search, { parseNumbers: true });
@@ -39,7 +50,7 @@ const Table = ({ options }) => {
 
   React.useEffect(() => {
     updateTable();
-  }, [filters]);
+  }, [filters, pagination]);
 
   const onFilterChange = React.useCallback(
     (name, value) => {
@@ -152,17 +163,13 @@ const Table = ({ options }) => {
                       <Form.Item
                         name={name}
                         label={toUpperCase(name)}
-                        rules={
-                          options &&
-                          options.validators &&
-                          options.validators.map((validator) =>
-                            typeof validator === "string"
-                              ? {
-                                  [validator]: true,
-                                }
-                              : validator
-                          )
-                        }
+                        rules={options?.validators?.map((validator) =>
+                          typeof validator === "string"
+                            ? {
+                                [validator]: true,
+                              }
+                            : validator
+                        )}
                       >
                         <InlineEditor
                           type={type}
@@ -195,6 +202,13 @@ const Table = ({ options }) => {
             data &&
             Array.isArray(data) &&
             data.map((d) => ({ ...d, key: d.id }))
+          }
+          pagination={
+            tablePagination
+              ? {
+                  onChange: (page, size) => setPagination({ page, size }),
+                }
+              : false
           }
         />
       </div>

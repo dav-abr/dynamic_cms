@@ -28,14 +28,14 @@
           "name": "View",
           "type": "navigate",
           "options": {
-            "url": "/user/view"
+            "url": "/user/view/[id]"
           }
         },
         {
           "name": "Edit",
           "type": "navigate",
           "options": {
-            "url": "/user/edit"
+            "url": "/user/edit/[id]"
           }
         }
       ],
