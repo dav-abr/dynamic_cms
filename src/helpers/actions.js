@@ -1,6 +1,7 @@
 import * as router from "./router";
 import apiSettings from "../config/api/settings.json";
 import queryString from "query-string";
+import { notification } from "antd";
 
 export default function actionHandler(type, options = {}, args = {}) {
   const { params = {} } = args;
@@ -51,31 +52,41 @@ export default function actionHandler(type, options = {}, args = {}) {
         callParams.body = JSON.stringify(params.body);
       }
 
-      return fetch(callURL, callParams)
-        .then(async (res) => {
-          const { responseField } = routeSettings;
+      return new Promise((resolve, reject) => {
+        fetch(callURL, callParams)
+          .then(async (res) => {
+            const { responseField } = routeSettings;
 
-          return {
-            res,
-            data: responseField
-              ? await res.json()[responseField]
-              : await res.json(),
-          };
-        })
-        .then(({ data, res }) => {
-          const { mapHeadersToResponse } = routeSettings;
-          const response = {
-            body: data,
-          };
+            return {
+              res,
+              data: responseField
+                ? await res.json()[responseField]
+                : await res.json(),
+            };
+          })
+          .then(({ data, res }) => {
+            const { mapHeadersToResponse } = routeSettings;
+            const response = {
+              body: data,
+            };
 
-          if (mapHeadersToResponse) {
-            for (const key in mapHeadersToResponse) {
-              response[mapHeadersToResponse[key]] = res.headers.get(key);
+            if (mapHeadersToResponse) {
+              for (const key in mapHeadersToResponse) {
+                response[mapHeadersToResponse[key]] = res.headers.get(key);
+              }
             }
-          }
 
-          return response;
-        });
+            return resolve(response);
+          })
+          .catch((err) => {
+            notification.error({
+              message: "Error",
+              description: err.message,
+            });
+
+            return reject(err);
+          });
+      });
     case "navigate":
       return args.params.history.push(
         options.url.replace(

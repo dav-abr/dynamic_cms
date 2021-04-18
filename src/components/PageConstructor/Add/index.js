@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { Button } from "antd";
+import { Button, notification } from "antd";
 import { toUpperCase } from "../../../helpers";
 import "./styles.css";
 import InlineEditor from "../InlineEditor";
@@ -14,6 +14,24 @@ const Add = ({ options }) => {
   const onChange = React.useCallback(
     (name, value) => {
       setData({ ...data, [name]: value });
+    },
+    [data]
+  );
+
+  const onAction = React.useCallback(
+    (action) => {
+      if (action.type !== "reset") {
+        actionHandler(action.type, action.options, {
+          params: { body: data },
+        }).then(() =>
+          notification.success({
+            message: "Success",
+            description: "Successfully added",
+          })
+        );
+      } else {
+        setData({});
+      }
     },
     [data]
   );
@@ -37,18 +55,7 @@ const Add = ({ options }) => {
       <div className="buttons">
         {actions &&
           actions.map((action) => (
-            <Button
-              key={action.name}
-              onClick={() => {
-                if (action.type !== "reset") {
-                  actionHandler(action.type, action.options, {
-                    params: { body: data },
-                  });
-                } else {
-                  setData({});
-                }
-              }}
-            >
+            <Button key={action.name} onClick={() => onAction(action)}>
               {toUpperCase(action.name)}
             </Button>
           ))}

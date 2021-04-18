@@ -1,10 +1,10 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { useParams } from "react-router-dom";
-import { Button, Input } from "antd";
+import { Button, Input, notification } from "antd";
 import { toUpperCase } from "../../../helpers";
-import "./styles.css";
 import actionHandler from "../../../helpers/actions";
+import "./styles.css";
 
 const FIELD_TYPES = {
   string: ({ value, onChange }) => (
@@ -49,7 +49,12 @@ const Edit = ({ options }) => {
       if (action.type !== "reset") {
         actionHandler(action.type, action.options, {
           params: { body: data, id },
-        });
+        }).then(() =>
+          notification.success({
+            message: "Success",
+            description: "Successfully edited",
+          })
+        );
       } else {
         setData(initialData);
       }

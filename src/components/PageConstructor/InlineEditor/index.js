@@ -14,7 +14,7 @@ const FIELDS = {
       if (options.initial) {
         const { initial } = options;
         actionHandler(initial.type, initial.options).then((res) => {
-          setValues(res.response);
+          setValues(res.body);
         });
       }
     }, []);

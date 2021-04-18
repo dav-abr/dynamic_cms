@@ -46,16 +46,14 @@ const Table = ({ options }) => {
     const queryFilters = qs.parse(location.search, { parseNumbers: true });
     formRef.current.setFieldsValue(queryFilters);
     setFilters(queryFilters);
-
-    updateTable().then((res) => {
-      if (tablePagination) {
-        setPagination({ ...pagination, total: res.total });
-      }
-    });
   }, []);
 
   React.useEffect(() => {
-    updateTable();
+    updateTable().then((res) => {
+      if (tablePagination && res.total !== pagination.total) {
+        setPagination({ ...pagination, total: res.total });
+      }
+    });
   }, [filters, pagination]);
 
   const onFilterChange = React.useCallback(
