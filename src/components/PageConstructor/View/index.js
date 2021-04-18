@@ -17,26 +17,17 @@ const FIELD_TYPES = {
 
 const View = ({ options }) => {
   const [data, setData] = React.useState({});
-  let { id } = useParams();
+  const { id } = useParams();
 
   const { name, fields, actions } = options || {};
 
   React.useEffect(() => {
     if (options && options.initial) {
-      if (options.initial.type === "router") {
-        const { functionName } = options.initial.options;
-        if (router && router[functionName]) {
-          router[functionName](parseInt(id)).then((res) => {
-            setData(res);
-          });
-        }
-      } else {
-        actionHandler(options.initial.type, options.initial.options, {
-          params: { id },
-        }).then((res) => {
-          setData(res);
-        });
-      }
+      actionHandler(options.initial.type, options.initial.options, {
+        params: { id },
+      }).then((res) => {
+        setData(res.body);
+      });
     }
   }, []);
 

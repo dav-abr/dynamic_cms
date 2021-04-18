@@ -11,6 +11,9 @@
         "pagination": {
           "page": "_page",
           "size": "_limit"
+        },
+        "mapHeadersToResponse": {
+          "X-Total-Count": "total"
         }
       },
       "posts_get": {
@@ -42,7 +45,14 @@
       "users_get_all": {
         "name": "users_get_all",
         "URL": "/users",
-        "method": "GET"
+        "method": "GET",
+        "pagination": {
+          "page": "_page",
+          "size": "_limit"
+        },
+        "mapHeadersToResponse": {
+          "X-Total-Count": "total"
+        }
       },
       "users_get": {
         "name": "users_get",
@@ -52,12 +62,23 @@
       "users_edit": {
         "name": "users_edit",
         "URL": "/users/[id]",
-        "method": "PUT"
+        "method": "PUT",
+        "headers": {
+          "Content-Type": "application/json"
+        }
       },
       "users_add": {
         "name": "users_add",
         "URL": "/users",
-        "method": "POST"
+        "method": "POST",
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      },
+      "users_delete": {
+        "name": "users_delete",
+        "URL": "/users/[id]",
+        "method": "DELETE"
       }
     }
   }

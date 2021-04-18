@@ -12,6 +12,7 @@ module.exports = {
   resolve: {
     extensions: [".js", ".jsx"],
   },
+  devtool: "source-map",
   devServer: {
     publicPath: "/",
     contentBase: path.resolve(__dirname, "dist"),
@@ -20,7 +21,6 @@ module.exports = {
     historyApiFallback: true,
     hot: true,
   },
-  devtool: "source-map",
   module: {
     rules: [
       {

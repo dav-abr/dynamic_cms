@@ -15,6 +15,7 @@ const Table = ({ options }) => {
   const [pagination, setPagination] = React.useState({
     page: 1,
     size: 10,
+    total: null,
   });
   const history = useHistory();
   const location = useLocation();
@@ -31,11 +32,12 @@ const Table = ({ options }) => {
   const updateTable = React.useCallback(() => {
     if (options && options.initial) {
       const { initial } = options;
-      actionHandler(initial.type, initial.options, {
+      return actionHandler(initial.type, initial.options, {
         search: filters,
         pagination,
       }).then((res) => {
-        setData(res);
+        setData(res.body);
+        return res;
       });
     }
   }, [options, filters, pagination]);
@@ -45,7 +47,11 @@ const Table = ({ options }) => {
     formRef.current.setFieldsValue(queryFilters);
     setFilters(queryFilters);
 
-    updateTable();
+    updateTable().then((res) => {
+      if (tablePagination) {
+        setPagination({ ...pagination, total: res.total });
+      }
+    });
   }, []);
 
   React.useEffect(() => {
@@ -206,7 +212,9 @@ const Table = ({ options }) => {
           pagination={
             tablePagination
               ? {
-                  onChange: (page, size) => setPagination({ page, size }),
+                  onChange: (page, size) =>
+                    setPagination({ ...pagination, page, size }),
+                  total: pagination.total,
                 }
               : false
           }

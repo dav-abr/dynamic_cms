@@ -31,8 +31,8 @@ const Edit = ({ options }) => {
       actionHandler(options.initial.type, options.initial.options, {
         params: { id },
       }).then((res) => {
-        setData(res);
-        initialData = { ...res };
+        setData(res.body);
+        initialData = { ...res.body };
       });
     }
   }, []);

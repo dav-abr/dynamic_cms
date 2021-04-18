@@ -51,14 +51,31 @@ export default function actionHandler(type, options = {}, args = {}) {
         callParams.body = JSON.stringify(params.body);
       }
 
-      return fetch(callURL, callParams).then((res) => {
-        const { responseField } = routeSettings;
-        if (responseField) {
-          return res.json()[responseField];
-        } else {
-          return res.json();
-        }
-      });
+      return fetch(callURL, callParams)
+        .then(async (res) => {
+          const { responseField } = routeSettings;
+
+          return {
+            res,
+            data: responseField
+              ? await res.json()[responseField]
+              : await res.json(),
+          };
+        })
+        .then(({ data, res }) => {
+          const { mapHeadersToResponse } = routeSettings;
+          const response = {
+            body: data,
+          };
+
+          if (mapHeadersToResponse) {
+            for (const key in mapHeadersToResponse) {
+              response[mapHeadersToResponse[key]] = res.headers.get(key);
+            }
+          }
+
+          return response;
+        });
     case "navigate":
       return args.params.history.push(
         options.url.replace(
@@ -73,5 +90,8 @@ export default function actionHandler(type, options = {}, args = {}) {
       } else {
         return new Promise((resolve) => resolve({}));
       }
+    case "debug":
+      console.log(type, args);
+      break;
   }
 }
