@@ -10,15 +10,17 @@ import actionHandler from "../../../helpers/actions";
 import "./styles.css";
 
 const Table = ({ options }) => {
+  const location = useLocation();
+  const queryFilters = qs.parse(location.search, { parseNumbers: true });
+
   const [data, setData] = React.useState([]);
-  const [filters, setFilters] = React.useState({});
+  const [filters, setFilters] = React.useState(queryFilters || {});
   const [pagination, setPagination] = React.useState({
     page: 1,
     size: 10,
-    total: null,
   });
+  const [total, setTotal] = React.useState(null);
   const history = useHistory();
-  const location = useLocation();
   const formRef = React.useRef();
   const {
     name,
@@ -43,15 +45,13 @@ const Table = ({ options }) => {
   }, [options, filters, pagination]);
 
   React.useEffect(() => {
-    const queryFilters = qs.parse(location.search, { parseNumbers: true });
     formRef.current.setFieldsValue(queryFilters);
-    setFilters(queryFilters);
   }, []);
 
   React.useEffect(() => {
     updateTable().then((res) => {
-      if (tablePagination && res.total !== pagination.total) {
-        setPagination({ ...pagination, total: res.total });
+      if (res.total !== total) {
+        setTotal(res.total);
       }
     });
   }, [filters, pagination]);
@@ -145,6 +145,28 @@ const Table = ({ options }) => {
     [fields, rowActions]
   );
 
+  const filterElements = React.useMemo(() => tableFilters.fields.map(({ name, type, options }) => (
+    <Col span={12} key={name} className="table-filters-col">
+      <Form.Item
+        name={name}
+        label={toUpperCase(name)}
+        rules={options?.validators?.map((validator) =>
+          typeof validator === "string"
+            ? {
+              [validator]: true,
+            }
+            : validator
+        )}
+      >
+        <InlineEditor
+          type={type}
+          onChange={(value) => onFilterChange(name, value)}
+          options={options}
+        />
+      </Form.Item>
+    </Col>
+  )), [tableFilters])
+
   return (
     (fields && (
       <div>
@@ -162,27 +184,7 @@ const Table = ({ options }) => {
             {tableFilters && tableFilters.fields && (
               <Form name={name} onFinish={onSearch} ref={formRef}>
                 <Row gutter={16}>
-                  {tableFilters.fields.map(({ name, type, options }) => (
-                    <Col span={12} key={name} className="table-filters-col">
-                      <Form.Item
-                        name={name}
-                        label={toUpperCase(name)}
-                        rules={options?.validators?.map((validator) =>
-                          typeof validator === "string"
-                            ? {
-                                [validator]: true,
-                              }
-                            : validator
-                        )}
-                      >
-                        <InlineEditor
-                          type={type}
-                          onChange={(value) => onFilterChange(name, value)}
-                          options={options}
-                        />
-                      </Form.Item>
-                    </Col>
-                  ))}
+                  {filterElements}
                 </Row>
                 <div className="table-filters-buttons">
                   <Form.Item>
@@ -211,8 +213,8 @@ const Table = ({ options }) => {
             tablePagination
               ? {
                   onChange: (page, size) =>
-                    setPagination({ ...pagination, page, size }),
-                  total: pagination.total,
+                    setPagination({ page, size }),
+                  total: total,
                 }
               : false
           }
