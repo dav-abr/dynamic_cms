@@ -17,7 +17,7 @@ module.exports = {
     publicPath: "/",
     contentBase: path.resolve(__dirname, "dist"),
     clientLogLevel: "silent",
-    port: 3000,
+    port: 5005,
     historyApiFallback: true,
     hot: true,
   },

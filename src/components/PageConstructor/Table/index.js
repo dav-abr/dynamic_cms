@@ -145,27 +145,31 @@ const Table = ({ options }) => {
     [fields, rowActions]
   );
 
-  const filterElements = React.useMemo(() => tableFilters.fields.map(({ name, type, options }) => (
-    <Col span={12} key={name} className="table-filters-col">
-      <Form.Item
-        name={name}
-        label={toUpperCase(name)}
-        rules={options?.validators?.map((validator) =>
-          typeof validator === "string"
-            ? {
-              [validator]: true,
-            }
-            : validator
-        )}
-      >
-        <InlineEditor
-          type={type}
-          onChange={(value) => onFilterChange(name, value)}
-          options={options}
-        />
-      </Form.Item>
-    </Col>
-  )), [tableFilters])
+  const filterElements = React.useMemo(
+    () =>
+      tableFilters.fields.map(({ name, type, options }) => (
+        <Col span={12} key={name} className="table-filters-col">
+          <Form.Item
+            name={name}
+            label={toUpperCase(name)}
+            rules={options?.validators?.map((validator) =>
+              typeof validator === "string"
+                ? {
+                    [validator]: true,
+                  }
+                : validator
+            )}
+          >
+            <InlineEditor
+              type={type}
+              onChange={(value) => onFilterChange(name, value)}
+              options={options}
+            />
+          </Form.Item>
+        </Col>
+      )),
+    [tableFilters]
+  );
 
   return (
     (fields && (
@@ -183,9 +187,7 @@ const Table = ({ options }) => {
           <div className="table-filters">
             {tableFilters && tableFilters.fields && (
               <Form name={name} onFinish={onSearch} ref={formRef}>
-                <Row gutter={16}>
-                  {filterElements}
-                </Row>
+                <Row gutter={16}>{filterElements}</Row>
                 <div className="table-filters-buttons">
                   <Form.Item>
                     <Button type="primary" htmlType="submit">
@@ -212,8 +214,7 @@ const Table = ({ options }) => {
           pagination={
             tablePagination
               ? {
-                  onChange: (page, size) =>
-                    setPagination({ page, size }),
+                  onChange: (page, size) => setPagination({ page, size }),
                   total: total,
                 }
               : false

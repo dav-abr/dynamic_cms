@@ -1,7 +1,7 @@
 {
   "jsonplaceholder": {
     "name": "jsonplaceholder",
-    "baseURL": "http://localhost:3001",
+    "baseURL": "http://localhost:5006",
     "routes": {
       "posts_get_all": {
         "name": "posts_get_all",
